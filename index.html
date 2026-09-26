@@ -31,7 +31,7 @@
       padding-bottom: 90px;
     }
 
-    /* 1. TOP NAVBAR (GAYA SAUDAGARWP DENGAN TEMA BIRU LANGIT) */
+    /* 1. TOP NAVBAR */
     .navbar {
       background: var(--primary);
       color: var(--white);
@@ -171,7 +171,7 @@
     .discount-badge .num { font-size: 24px; line-height: 1; }
     .discount-badge .text { font-size: 12px; }
 
-    /* 3. KATEGORI (HANYA SNACK) */
+    /* 3. KATEGORI */
     .category-section {
       margin-bottom: 30px;
       text-align: center;
@@ -285,7 +285,7 @@
       color: #b91c1c;
     }
 
-    /* Counter Jumlah [- 1 +] */
+    /* Qty Control */
     .qty-control {
       display: flex;
       align-items: center;
@@ -317,7 +317,6 @@
       font-weight: 700;
     }
 
-    /* Tombol Aksi */
     .btn-cart {
       background: var(--primary);
       color: white;
@@ -340,7 +339,7 @@
       cursor: not-allowed;
     }
 
-    /* 5. FLOATING WHATSAPP BUTTON */
+    /* 5. WA FLOAT */
     .wa-float {
       position: fixed;
       bottom: 24px;
@@ -361,7 +360,7 @@
     }
     .wa-float:hover { transform: scale(1.08); }
 
-    /* 6. MODAL KERANJANG & CHECKOUT */
+    /* 6. MODAL KERANJANG */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -416,7 +415,6 @@
       outline: none;
     }
 
-    /* Pilihan Pengantaran */
     .ship-card {
       border: 2px solid #e2e8f0;
       border-radius: 10px;
@@ -496,7 +494,7 @@
   </nav>
 
   <div class="container">
-    <!-- 2. HERO BANNER PROMO (BIRU LANGIT) -->
+    <!-- 2. HERO BANNER PROMO -->
     <section class="hero-banner">
       <div class="hero-content">
         <div class="hero-subtitle">Cobain Menu Kerupuk Pilihan</div>
@@ -515,7 +513,7 @@
       </div>
     </section>
 
-    <!-- 3. KATEGORI (HANYA 1 KATEGORI: SNACK) -->
+    <!-- 3. KATEGORI (SNACK) -->
     <section class="category-section">
       <div class="category-list">
         <div class="category-item" onclick="document.getElementById('produk-section').scrollIntoView({behavior:'smooth'})">
@@ -542,7 +540,7 @@
     </section>
   </div>
 
-  <!-- 5. TOMBOL WHATSAPP MELAYANG -->
+  <!-- 5. WA FLOAT BUTTON -->
   <a href="#" id="floatingWALink" class="wa-float" target="_blank" title="Tanya Penjual via WhatsApp">
     💬
   </a>
@@ -623,7 +621,7 @@
     </div>
   </div>
 
-  <!-- 7. MODAL PROFIL TOKO -->
+  <!-- 7. MODAL PROFIL -->
   <div class="modal-overlay" id="profileModal">
     <div class="modal-card">
       <div class="modal-header">
@@ -640,12 +638,11 @@
   <!-- JAVASCRIPT & BACKEND INTEGRASI -->
   <script>
     // ========================================================
-    // KONFIGURASI RESMI TOKO JUALANNYA ITI (TERSIMPAN)
+    // KONFIGURASI RESMI TOKO JUALANNYA ITI
     // ========================================================
     const NOMOR_WA_TOKO = "6281377413338";
     const SCRIPT_URL    = "https://script.google.com/macros/s/AKfycbz36ncvqz2x7Q-w4gzBE2NQ9c1PushvswLW1dGq50P3__sBRKOo0feNfSH4pyTlSHlHjg/exec";
 
-    // Link WhatsApp Mengambang Otomatis
     document.getElementById('floatingWALink').href = `https://wa.me/${NOMOR_WA_TOKO}?text=${encodeURIComponent('Halo Jualannya iti, saya ingin tanya seputar produk kerupuknya 🙏')}`;
 
     let daftarProduk = [];
@@ -653,17 +650,31 @@
     let ongkirTerpilih = 10000;
     let kurirTerpilih = "Kurir Toko";
 
-    // Muat data pembeli yang tersimpan di HP agar tidak ketik ulang
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('iti_nama')) document.getElementById('custName').value = localStorage.getItem('iti_nama');
       if (localStorage.getItem('iti_wa')) document.getElementById('custWA').value = localStorage.getItem('iti_wa');
       if (localStorage.getItem('iti_alamat')) document.getElementById('custAddress').value = localStorage.getItem('iti_alamat');
       if (localStorage.getItem('iti_patokan')) document.getElementById('custPatokan').value = localStorage.getItem('iti_patokan');
       
+      ambilPengaturanBanner();
       ambilProduk();
     });
 
-    // 1. Ambil Produk dari Google Sheets
+    // 1. Ambil Banner dari CMS
+    async function ambilPengaturanBanner() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getSettings`);
+        const set = await res.json();
+        if (set.banner_img) document.querySelector('.hero-img').src = set.banner_img;
+        if (set.banner_title) document.querySelector('.hero-title').innerText = set.banner_title;
+        if (set.banner_subtitle) document.querySelector('.hero-subtitle').innerText = set.banner_subtitle;
+        if (set.banner_desc) document.querySelector('.hero-desc').innerText = set.banner_desc;
+      } catch (e) {
+        console.log("Banner default aktif");
+      }
+    }
+
+    // 2. Ambil Produk dari Google Sheets
     async function ambilProduk() {
       try {
         const res = await fetch(`${SCRIPT_URL}?action=getProduk`);
@@ -677,28 +688,6 @@
       }
     }
 
-// Muat data pengaturan banner dari CMS
-    async function ambilPengaturanBanner() {
-      try {
-        const res = await fetch(`${SCRIPT_URL}?action=getSettings`);
-        const set = await res.json();
-        if (set.banner_img) document.querySelector('.hero-img').src = set.banner_img;
-        if (set.banner_title) document.querySelector('.hero-title').innerText = set.banner_title;
-        if (set.banner_subtitle) document.querySelector('.hero-subtitle').innerText = set.banner_subtitle;
-        if (set.banner_desc) document.querySelector('.hero-desc').innerText = set.banner_desc;
-      } catch (e) {
-        console.log("Menggunakan banner default");
-      }
-    }
-
-    // Panggil saat website pertama kali dibuka:
-    window.addEventListener('DOMContentLoaded', () => {
-      // ... kode localStorage sebelumnya ...
-      ambilPengaturanBanner();
-      ambilProduk();
-    });
-
-    // 2. Tampilkan Produk Sesuai Gambar Ketiga SaudagarWP
     function renderProdukGrid() {
       const container = document.getElementById('productGrid');
       container.innerHTML = "";
@@ -734,7 +723,6 @@
       });
     }
 
-    // 3. Tombol [- 1 +]
     function ubahAngka(id, delta) {
       const elem = document.getElementById(`qty-val-${id}`);
       let currentVal = parseInt(elem.innerText);
@@ -743,7 +731,6 @@
       elem.innerText = newVal;
     }
 
-    // 4. Tambah ke Keranjang Belanja
     function tambahKeKeranjang(id) {
       const item = daftarProduk.find(p => String(p.id) === String(id));
       const qty = parseInt(document.getElementById(`qty-val-${id}`).innerText);
@@ -769,7 +756,6 @@
       document.getElementById('cartCountBadge').innerText = totalItem;
     }
 
-    // 5. Kelola Modal Keranjang
     function bukaKeranjangModal() {
       const container = document.getElementById('cartItemsContainer');
       container.innerHTML = "";
@@ -834,7 +820,9 @@
       bukaKeranjangModal();
     }
 
-    // 6. Checkout ke WhatsApp & Catat ke Database Sheets
+    // ========================================================
+    // CHECKOUT: SIMPAN KE GOOGLE SHEETS DULU BARU BUKA WHATSAPP
+    // ========================================================
     async function prosesCheckoutWhatsApp() {
       const nama = document.getElementById('custName').value.trim();
       const wa = document.getElementById('custWA').value.trim();
@@ -851,7 +839,12 @@
         return;
       }
 
-      // Simpan data di memori HP pelanggan
+      // Indikator Loading di Tombol agar pembeli tahu sedang mencatat pesanan
+      const btnCheckout = document.querySelector('.btn-checkout');
+      const textAsli = btnCheckout.innerText;
+      btnCheckout.innerText = "⏳ Sedang mencatat pesanan ke toko...";
+      btnCheckout.disabled = true;
+
       localStorage.setItem('iti_nama', nama);
       localStorage.setItem('iti_wa', wa);
       localStorage.setItem('iti_alamat', alamat);
@@ -871,7 +864,6 @@
         ? `Rp ${(subtotal + ongkirTerpilih).toLocaleString('id-ID')}`
         : `Rp ${subtotal.toLocaleString('id-ID')} (+ Ongkir Ojol/Ekspedisi)`;
 
-      // Format Struk WhatsApp Bersih & Mudah Dibaca
       const pesanStruk = `🧾 *STRUK PESANAN - JUALANNYA ITI*
 ----------------------------------------
 No. Pesanan : #${orderId}
@@ -894,13 +886,14 @@ ${rincianBarang}----------------------------------------
 
 Halo Jualannya iti, saya sudah memesan kerupuk lewat website. Mohon segera diproses ya. Terima kasih! 🙏`;
 
-      // Simpan ke Google Spreadsheet di latar belakang
+      // 1. Simpan ke Google Spreadsheet (Menggunakan AWAIT agar proses selesai 100%)
       try {
-        fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: "POST",
           mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({
+            action: "order", // Perintah rekam pesanan
             order_id: orderId,
             nama: nama,
             no_wa: wa,
@@ -916,7 +909,14 @@ Halo Jualannya iti, saya sudah memesan kerupuk lewat website. Mohon segera dipro
         console.log("Sheet log error:", e);
       }
 
-      // Buka Aplikasi WhatsApp Toko
+      // 2. Kosongkan keranjang setelah data berhasil tercatat
+      keranjang = {};
+      perbaruiBadgeKeranjang();
+      tutupKeranjangModal();
+
+      // 3. Kembalikan tombol dan arahkan ke WhatsApp Toko
+      btnCheckout.innerText = textAsli;
+      btnCheckout.disabled = false;
       window.location.href = `https://wa.me/${NOMOR_WA_TOKO}?text=${encodeURIComponent(pesanStruk)}`;
     }
   </script>
