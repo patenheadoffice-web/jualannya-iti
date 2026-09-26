@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Admin - Jualannya iti</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --bg: #f1f5f9;
+      --dark: #0f172a;
+      --gray: #64748b;
+      --border: #cbd5e1;
+      --white: #ffffff;
+      --green: #16a34a;
+      --red: #ef4444;
+      --amber: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--dark); font-size: 15px; }
+
+    /* LAYOUT UTAMA */
+    .app-wrapper { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: #0f172a; color: white; padding: 24px 16px; flex-shrink: 0; }
+    .sidebar h2 { font-size: 22px; font-weight: 800; color: #38bdf8; margin-bottom: 24px; padding-left: 8px; }
+    .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #94a3b8; text-decoration: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-bottom: 6px; }
+    .menu-item:hover, .menu-item.active { background: #1e293b; color: white; }
+    .menu-item.active { background: var(--primary); }
+
+    .main-content { flex: 1; padding: 28px; overflow-y: auto; max-width: 1200px; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-title { font-size: 26px; font-weight: 800; }
+
+    /* KARTU STATISTIK */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--white); padding: 20px; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    .stat-label { font-size: 14px; color: var(--gray); font-weight: 600; }
+    .stat-num { font-size: 28px; font-weight: 800; margin-top: 6px; color: var(--primary); }
+
+    /* TABEL DATA */
+    .card { background: var(--white); border-radius: 16px; padding: 24px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+    th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 15px; }
+    th { font-weight: 700; color: var(--gray); background: #f8fafc; }
+    .thumb-img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #e2e8f0; }
+
+    /* FORM & INPUT */
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 15px; }
+    input, textarea, select { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 15px; font-family: inherit; }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); outline: none; }
+
+    /* BUTTONS */
+    .btn { padding: 10px 16px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-success { background: var(--green); color: white; }
+    .btn-danger { background: var(--red); color: white; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--dark); }
+    .btn-sm { padding: 6px 12px; font-size: 13px; }
+
+    /* MODAL LOGIN PIN */
+    #authOverlay { position: fixed; inset: 0; background: #0f172a; display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    .auth-box { background: white; padding: 32px; border-radius: 16px; width: 340px; text-align: center; }
+
+    /* PREVIEW BANNER */
+    .banner-preview-box { border-radius: 14px; overflow: hidden; margin-top: 14px; border: 2px dashed #cbd5e1; padding: 14px; background: #f8fafc; }
+    .banner-preview-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 8px; }
+
+    @media (max-width: 820px) {
+      .app-wrapper { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .main-content { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MODAL LOGIN PIN ADMIN -->
+  <div id="authOverlay">
+    <div class="auth-box">
+      <h2 style="margin-bottom: 8px;">🥨 CMS Admin</h2>
+      <p style="color:var(--gray); font-size:14px; margin-bottom: 20px;">Masukkan PIN Admin untuk mengelola toko</p>
+      <input type="password" id="inputPin" placeholder="Masukkan PIN (Default: 1234)" style="text-align:center; font-size:20px; letter-spacing:4px; margin-bottom:14px;">
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="cekLogin()">Masuk Dashboard</button>
+    </div>
+  </div>
+
+  <div class="app-wrapper">
+    <!-- SIDEBAR MENU -->
+    <aside class="sidebar">
+      <h2>Jualannya iti</h2>
+      <div class="menu-item active" onclick="bukaTab('tab-pesanan')">🛒 Rekapan Pesanan</div>
+      <div class="menu-item" onclick="bukaTab('tab-produk')">📦 Kelola Produk & Stok</div>
+      <div class="menu-item" onclick="bukaTab('tab-banner')">🖼️ Foto Banner & Tampilan</div>
+      <div class="menu-item" onclick="bukaTab('tab-pelanggan')">👥 Data Pelanggan</div>
+      <div style="margin-top: 30px; border-top: 1px solid #334155; padding-top: 16px;">
+        <a href="index.html" target="_blank" class="menu-item" style="color:#38bdf8;">🌐 Buka Halaman Toko ↗</a>
+      </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+      
+      <!-- STATISTIK RINGKAS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Pesanan Masuk</div>
+          <div class="stat-num" id="statPesanan">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Produk Toko</div>
+          <div class="stat-num" id="statProduk">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pelanggan Terdaftar</div>
+          <div class="stat-num" id="statPelanggan">0</div>
+        </div>
+      </div>
+
+      <!-- ======================================================= -->
+      <!-- TAB 1: REKAPAN PESANAN & UBAH STATUS (DILENGKAPI TOMBOL SIMPAN) -->
+      <!-- ======================================================= -->
+      <section id="tab-pesanan" class="tab-pane">
+        <div class="header-bar">
+          <h1 class="page-title">Riwayat Pesanan Pelanggan</h1>
+          <button class="btn btn-outline" onclick="muatPesanan()">🔄 Segarkan Data</button>
+        </div>
+
+        <div class="card">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>No Order</th>
+                  <th>Tanggal</th>
+                  <th>Nama & WA</th>
+                  <th>Pesanan & Kurir</th>
+                  <th>Total</th>
+                  <th>Status & Aksi Simpan</th>
+                  <th>Hubungi WA</th>
+                </tr>
+              </thead>
+              <tbody id="tabelPesananBody">
+                <tr><td colspan="7" style="text-align:center; padding:20px;">Memuat data pesanan dari spreadsheet...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 2: KELOLA PRODUK & STOK -->
+      <!-- ======================================================= -->
+      <section id="tab-produk" class="tab-pane" style="display:none;">
+        <div class="header-bar">
+          <h1 class="page-title">Daftar Produk & Stok Toko</h1>
+          <button class="btn btn-primary" onclick="bukaModalProdukBaru()">+ Tambah Produk Baru</button>
+        </div>
+
+        <div class="card">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Foto</th>
+                  <th>Nama Produk</th>
+                  <th>Harga (Rp)</th>
+                  <th>Sisa Stok</th>
+                  <th>Aksi Cepat</th>
+                </tr>
+              </thead>
+              <tbody id="tabelProdukBody">
+                <tr><td colspan="5" style="text-align:center; padding:20px;">Memuat produk...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 3: PENGATURAN BANNER PROMO UTAMA -->
+      <!-- ======================================================= -->
+      <section id="tab-banner" class="tab-pane" style="display:none;">
+        <h1 class="page-title" style="margin-bottom: 20px;">Pengaturan Foto Banner & Halaman Depan</h1>
+        
+        <div class="card">
+          <h3 style="margin-bottom: 14px;">Ganti Banner Promosi</h3>
+          
+          <div class="form-group">
+            <label>Link / URL Foto Banner:</label>
+            <input type="text" id="settingBannerImg" placeholder="https://..." oninput="updatePreviewBanner(this.value)">
+          </div>
+
+          <div class="banner-preview-box">
+            <div style="font-weight:700; margin-bottom:8px; font-size:13px; color:var(--gray);">PREVIEW TAMPILAN BANNER:</div>
+            <img id="bannerImgPreview" src="" class="banner-preview-img" alt="Preview Banner">
+          </div>
+
+          <div class="form-group" style="margin-top: 16px;">
+            <label>Sub-Judul Promo Banner:</label>
+            <input type="text" id="settingBannerSubtitle">
+          </div>
+
+          <div class="form-group">
+            <label>Judul Utama Banner:</label>
+            <input type="text" id="settingBannerTitle">
+          </div>
+
+          <div class="form-group">
+            <label>Keterangan / Deskripsi Promo:</label>
+            <textarea id="settingBannerDesc" rows="3"></textarea>
+          </div>
+
+          <button class="btn btn-success" onclick="simpanPengaturanBanner()">💾 Simpan Perubahan Banner</button>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 4: DATA PELANGGAN -->
+      <!-- ======================================================= -->
+      <section id="tab-pelanggan" class="tab-pane" style="display:none;">
+        <div class="header-bar">
+          <h1 class="page-title">Buku Alamat Pelanggan</h1>
+        </div>
+
+        <div class="card">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Nomor WhatsApp</th>
+                  <th>Alamat Lengkap</th>
+                  <th>Patokan Rumah</th>
+                  <th>Tgl Daftar</th>
+                </tr>
+              </thead>
+              <tbody id="tabelPelangganBody">
+                <tr><td colspan="5" style="text-align:center; padding:20px;">Memuat data pelanggan...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL EDIT / TAMBAH PRODUK -->
+  <div id="modalProduk" style="position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:999; padding:16px;">
+    <div style="background:white; border-radius:16px; width:100%; max-width:520px; padding:24px; max-height:90vh; overflow-y:auto;">
+      <h2 id="modalProdukTitle" style="margin-bottom:16px;">Ubah Data Produk</h2>
+      <input type="hidden" id="prodId">
+      
+      <div class="form-group">
+        <label>Nama Kerupuk / Snack:</label>
+        <input type="text" id="prodNama">
+      </div>
+      <div class="form-group">
+        <label>Harga (Rp):</label>
+        <input type="number" id="prodHarga">
+      </div>
+      <div class="form-group">
+        <label>Sisa Stok (Bungkus):</label>
+        <input type="number" id="prodStok">
+      </div>
+      <div class="form-group">
+        <label>Link / URL Foto Produk:</label>
+        <input type="text" id="prodFoto" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label>Deskripsi Singkat:</label>
+        <textarea id="prodDeskripsi" rows="2"></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button class="btn btn-outline" onclick="tutupModalProduk()">Batal</button>
+        <button class="btn btn-primary" onclick="simpanDataProduk()">Simpan Produk</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =======================================================
+    // KONFIGURASI TERSIMPAN RESMI
+    // =======================================================
+    const SCRIPT_URL    = "https://script.google.com/macros/s/AKfycbz36ncvqz2x7Q-w4gzBE2NQ9c1PushvswLW1dGq50P3__sBRKOo0feNfSH4pyTlSHlHjg/exec";
+    const NOMOR_WA_TOKO = "6281377413338";
+    let PIN_ADMIN_SERVER = "1234"; 
+    let listProduk = [];
+
+    // 1. LOGIN PIN ADMIN
+    function cekLogin() {
+      const pin = document.getElementById('inputPin').value;
+      if (pin === PIN_ADMIN_SERVER) {
+        document.getElementById('authOverlay').style.display = 'none';
+        inisialisasiCMS();
+      } else {
+        alert("PIN salah! Silakan coba lagi.");
+      }
+    }
+
+    function inisialisasiCMS() {
+      muatPesanan();
+      muatProduk();
+      muatPengaturan();
+      muatPelanggan();
+    }
+
+    // 2. NAVIGASI TAB CMS
+    function bukaTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).style.display = 'block';
+      event.currentTarget.classList.add('active');
+    }
+
+    // 3. TAB PESANAN (STATUS: Order, Procces, Delivered, Done + TOMBOL SIMPAN)
+    async function muatPesanan() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getOrders`);
+        const orders = await res.json();
+        document.getElementById('statPesanan').innerText = orders.length;
+        const tbody = document.getElementById('tabelPesananBody');
+        tbody.innerHTML = "";
+
+        if (orders.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='7' style='text-align:center; padding:20px;'>Belum ada pesanan masuk.</td></tr>";
+          return;
+        }
+
+        orders.forEach(o => {
+          const tr = document.createElement('tr');
+          
+          tr.innerHTML = `
+            <td><strong>#${o.order_id}</strong></td>
+            <td><small>${o.tanggal}</small></td>
+            <td>
+              <strong>${o.nama}</strong><br>
+              <small style="color:var(--gray)">${o.no_wa}</small>
+            </td>
+            <td>
+              <div>${o.detail_pesanan}</div>
+              <small style="color:var(--primary); font-weight:700;">🛵 ${o.kurir}</small>
+            </td>
+            <td><strong>${o.total}</strong></td>
+            <td>
+              <!-- DROPDOWN 4 STATUS SESUAI PERMINTAAN ANDA -->
+              <div style="display:flex; gap:6px; align-items:center;">
+                <select id="status-select-${o.order_id}" style="padding:6px 8px; font-size:13px; font-weight:700; border-radius:6px; border:2px solid var(--border); width:auto;">
+                  <option value="Order" ${o.status==='Order' ? 'selected' : ''}>🟡 Order (Masuk)</option>
+                  <option value="Procces" ${o.status==='Procces' ? 'selected' : ''}>🔵 Procces (Disiapkan)</option>
+                  <option value="Delivered" ${o.status==='Delivered' ? 'selected' : ''}>🚚 Delivered (Diantar)</option>
+                  <option value="Done" ${o.status==='Done' ? 'selected' : ''}>✅ Done (Pickup Toko)</option>
+                </select>
+                <!-- TOMBOL SIMPAN STATUS KE SPREADSHEET -->
+                <button class="btn btn-sm btn-primary" onclick="simpanStatusPesanan('${o.order_id}')">
+                  💾 Simpan
+                </button>
+              </div>
+            </td>
+            <td>
+              <a href="https://wa.me/${formatWA(o.no_wa)}?text=${encodeURIComponent('Halo Pak/Bu ' + o.nama + ', terkait pesanan #' + o.order_id + ' dari Jualannya iti...')}" target="_blank" class="btn btn-sm btn-success">
+                Chat WA 📲
+              </a>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch(e) {
+        console.log("Error get orders:", e);
+      }
+    }
+
+    // FUNGSI MENYIMPAN STATUS BARU KE GOOGLE SPREADSHEET
+    async function simpanStatusPesanan(orderId) {
+      const selectElem = document.getElementById(`status-select-${orderId}`);
+      const statusBaru = selectElem.value;
+
+      // Kirim pembaruan ke Google Spreadsheet
+      await kirimKeBackend({ 
+        action: "updateOrderStatus", 
+        order_id: orderId, 
+        new_status: statusBaru 
+      });
+
+      alert(`✅ Berhasil! Status pesanan #${orderId} telah disimpan menjadi "${statusBaru}" di spreadsheet.`);
+    }
+
+    // 4. KELOLA PRODUK & STOK
+    async function muatProduk() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getProduk`);
+        listProduk = await res.json();
+        document.getElementById('statProduk').innerText = listProduk.length;
+        renderTabelProduk();
+      } catch(e) {
+        console.log("Error get produk:", e);
+      }
+    }
+
+    function renderTabelProduk() {
+      const tbody = document.getElementById('tabelProdukBody');
+      tbody.innerHTML = "";
+
+      listProduk.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><img src="${p.foto_url || 'https://via.placeholder.com/50'}" class="thumb-img"></td>
+          <td><strong>${p.nama}</strong><br><small style="color:var(--gray)">${p.id}</small></td>
+          <td>Rp ${Number(p.harga).toLocaleString('id-ID')}</td>
+          <td>
+            <strong style="color:${p.stok > 0 ? 'var(--green)' : 'var(--red)'}">${p.stok}</strong> bungkus
+          </td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editProdukModal('${p.id}')">✏️ Edit</button>
+            <button class="btn btn-sm ${p.stok > 0 ? 'btn-danger' : 'btn-success'}" onclick="toggleStokCepat('${p.id}', ${p.stok > 0 ? 0 : 20})">
+              ${p.stok > 0 ? 'Set Habis' : 'Isi 20'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function toggleStokCepat(id, stokBaru) {
+      await kirimKeBackend({ action: "updateProduct", id: id, stok: stokBaru });
+      muatProduk();
+    }
+
+    function editProdukModal(id) {
+      const p = listProduk.find(x => String(x.id) === String(id));
+      document.getElementById('modalProdukTitle').innerText = "Edit Produk: " + p.nama;
+      document.getElementById('prodId').value = p.id;
+      document.getElementById('prodNama').value = p.nama;
+      document.getElementById('prodHarga').value = p.harga;
+      document.getElementById('prodStok').value = p.stok;
+      document.getElementById('prodFoto').value = p.foto_url;
+      document.getElementById('prodDeskripsi').value = p.deskripsi;
+      document.getElementById('modalProduk').style.display = 'flex';
+    }
+
+    function bukaModalProdukBaru() {
+      document.getElementById('modalProdukTitle').innerText = "Tambah Produk Baru";
+      document.getElementById('prodId').value = "";
+      document.getElementById('prodNama').value = "";
+      document.getElementById('prodHarga').value = "";
+      document.getElementById('prodStok').value = "50";
+      document.getElementById('prodFoto').value = "";
+      document.getElementById('prodDeskripsi').value = "";
+      document.getElementById('modalProduk').style.display = 'flex';
+    }
+
+    function tutupModalProduk() {
+      document.getElementById('modalProduk').style.display = 'none';
+    }
+
+    async function simpanDataProduk() {
+      const id = document.getElementById('prodId').value;
+      const isNew = !id;
+
+      const payload = {
+        action: isNew ? "addProduct" : "updateProduct",
+        id: id,
+        nama: document.getElementById('prodNama').value.trim(),
+        harga: document.getElementById('prodHarga').value,
+        stok: document.getElementById('prodStok').value,
+        foto_url: document.getElementById('prodFoto').value.trim(),
+        deskripsi: document.getElementById('prodDeskripsi').value.trim()
+      };
+
+      await kirimKeBackend(payload);
+      tutupModalProduk();
+      alert("✅ Data produk berhasil disimpan!");
+      muatProduk();
+    }
+
+    // 5. PENGATURAN BANNER
+    async function muatPengaturan() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getSettings`);
+        const set = await res.json();
+        if (set.admin_pin) PIN_ADMIN_SERVER = String(set.admin_pin);
+        
+        document.getElementById('settingBannerImg').value = set.banner_img || "";
+        document.getElementById('bannerImgPreview').src = set.banner_img || "";
+        document.getElementById('settingBannerSubtitle').value = set.banner_subtitle || "";
+        document.getElementById('settingBannerTitle').value = set.banner_title || "";
+        document.getElementById('settingBannerDesc').value = set.banner_desc || "";
+      } catch (e) {
+        console.log("Error get settings:", e);
+      }
+    }
+
+    function updatePreviewBanner(val) {
+      document.getElementById('bannerImgPreview').src = val;
+    }
+
+    async function simpanPengaturanBanner() {
+      const payload = {
+        action: "saveSettings",
+        banner_img: document.getElementById('settingBannerImg').value.trim(),
+        banner_subtitle: document.getElementById('settingBannerSubtitle').value.trim(),
+        banner_title: document.getElementById('settingBannerTitle').value.trim(),
+        banner_desc: document.getElementById('settingBannerDesc').value.trim()
+      };
+
+      await kirimKeBackend(payload);
+      alert("✅ Pengaturan foto banner & teks berhasil diperbarui!");
+    }
+
+    // 6. DATA PELANGGAN
+    async function muatPelanggan() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getUsers`);
+        const users = await res.json();
+        document.getElementById('statPelanggan').innerText = users.length;
+        const tbody = document.getElementById('tabelPelangganBody');
+        tbody.innerHTML = "";
+
+        users.forEach(u => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${u.nama}</strong></td>
+            <td>${u.no_wa}</td>
+            <td>${u.alamat}</td>
+            <td><span style="color:#d97706; font-weight:700;">${u.patokan || '-'}</span></td>
+            <td><small>${u.tgl_daftar || '-'}</small></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch(e) {
+        console.log("Error get users:", e);
+      }
+    }
+
+    // HELPER: KIRIM DATA KE GOOGLE SPREADSHEET
+    async function kirimKeBackend(payload) {
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.log("Error simpan data:", err);
+      }
+    }
+
+    function formatWA(num) {
+      let clean = String(num).replace(/[^0-9]/g, '');
+      if (clean.startsWith('0')) clean = '62' + clean.slice(1);
+      return clean;
+    }
+  </script>
+</body>
+</html>

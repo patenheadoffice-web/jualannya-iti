@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jualannya iti - Pusat Kerupuk & Snack Renyah</title>
+  <!-- Google Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #0284c7;       /* Biru langit utama */
+      --primary-hover: #0369a1; /* Biru agak gelap saat disentuh */
+      --primary-light: #e0f2fe; /* Biru langit lembut */
+      --accent: #f59e0b;        /* Kuning keemasan untuk aksen */
+      --dark: #0f172a;
+      --gray: #64748b;
+      --bg: #f8fafc;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--dark);
+      font-size: 17px;
+      line-height: 1.5;
+      padding-bottom: 90px;
+    }
+
+    /* 1. TOP NAVBAR (GAYA SAUDAGARWP DENGAN TEMA BIRU LANGIT) */
+    .navbar {
+      background: var(--primary);
+      color: var(--white);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+    }
+    .nav-btn-menu {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .nav-icon-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 20px;
+      border: 2px solid var(--primary);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* 2. HERO BANNER PROMO */
+    .hero-banner {
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      border-radius: 24px;
+      margin: 24px auto 30px;
+      padding: 36px 32px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.35);
+    }
+    .hero-content {
+      max-width: 55%;
+      z-index: 2;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+    .hero-title {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .hero-desc {
+      font-size: 18px;
+      opacity: 0.95;
+      margin-bottom: 20px;
+    }
+    .hero-img-wrap {
+      position: relative;
+      max-width: 40%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-img {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 16px;
+      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.25));
+    }
+    .discount-badge {
+      position: absolute;
+      top: -10px;
+      right: 0;
+      background: white;
+      color: #dc2626;
+      border-radius: 50%;
+      width: 85px;
+      height: 85px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      transform: rotate(8deg);
+    }
+    .discount-badge .num { font-size: 24px; line-height: 1; }
+    .discount-badge .text { font-size: 12px; }
+
+    /* 3. KATEGORI (HANYA SNACK) */
+    .category-section {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .category-list {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 14px;
+    }
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .category-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 3px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      transition: transform 0.2s;
+    }
+    .category-circle:hover {
+      transform: translateY(-4px);
+      background: var(--primary-light);
+    }
+    .category-name {
+      font-size: 19px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .category-count {
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    /* 4. GRID PRODUK */
+    .section-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .product-card:hover {
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      border-color: #cbd5e1;
+    }
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #f1f5f9;
+      margin-bottom: 14px;
+    }
+    .product-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .product-desc {
+      font-size: 15px;
+      color: var(--gray);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .product-price {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 14px;
+    }
+    .stock-tag {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #dcfce7;
+      color: #15803d;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .stock-tag.empty {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* Counter Jumlah [- 1 +] */
+    .qty-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #f8fafc;
+    }
+    .qty-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: 700;
+      width: 44px;
+      height: 40px;
+      cursor: pointer;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qty-btn:active { background: #e2e8f0; }
+    .qty-value {
+      width: 45px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* Tombol Aksi */
+    .btn-cart {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-cart:hover { background: var(--primary-hover); }
+    .btn-cart:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    /* 5. FLOATING WHATSAPP BUTTON */
+    .wa-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #25d366;
+      color: white;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+      z-index: 99;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+    .wa-float:hover { transform: scale(1.08); }
+
+    /* 6. MODAL KERANJANG & CHECKOUT */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-card {
+      background: white;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      border-radius: 20px;
+      overflow-y: auto;
+      padding: 24px;
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    .modal-title { font-size: 22px; font-weight: 800; color: var(--dark); }
+    .close-btn {
+      background: #f1f5f9;
+      border: none;
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 16px; }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    /* Pilihan Pengantaran */
+    .ship-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      background: #fff;
+    }
+    .ship-card input {
+      margin-top: 4px;
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+    }
+    .ship-card.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .cart-summary {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+    .btn-checkout {
+      background: #16a34a;
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 18px;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .hero-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 20px;
+      }
+      .hero-content { max-width: 100%; margin-bottom: 20px; }
+      .hero-title { font-size: 30px; }
+      .hero-img-wrap { max-width: 70%; }
+      .discount-badge { width: 70px; height: 70px; top: -5px; right: -10px; }
+      .discount-badge .num { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. TOP NAVBAR -->
+  <nav class="navbar">
+    <button class="nav-btn-menu" onclick="bukaProfilModal()">
+      <span>☰</span> Menu
+    </button>
+    <div class="logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      🥨 Jualannya iti
+    </div>
+    <div class="nav-icons">
+      <button class="nav-icon-btn" onclick="bukaProfilModal()" title="Profil Toko">
+        👤
+      </button>
+      <button class="nav-icon-btn" onclick="bukaKeranjangModal()" title="Keranjang Belanja">
+        🛒
+        <span class="cart-badge" id="cartCountBadge">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- 2. HERO BANNER PROMO (BIRU LANGIT) -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <div class="hero-subtitle">Cobain Menu Kerupuk Pilihan</div>
+        <h1 class="hero-title">Penawaran Spesial Kerupuk Gurih!</h1>
+        <p class="hero-desc">Dibuat dari bahan asli berkualitas, renyah tahan lama, higienis, dan selalu baru digoreng setiap hari.</p>
+        <button class="btn-cart" style="max-width: 220px; background: white; color: var(--primary);" onclick="document.getElementById('produk-section').scrollIntoView({behavior:'smooth'})">
+          Pesan Sekarang 🛍️
+        </button>
+      </div>
+      <div class="hero-img-wrap">
+        <img src="https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=600" alt="Kerupuk Jualannya iti" class="hero-img">
+        <div class="discount-badge">
+          <span class="num">100%</span>
+          <span class="text">HALAL</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. KATEGORI (HANYA 1 KATEGORI: SNACK) -->
+    <section class="category-section">
+      <div class="category-list">
+        <div class="category-item" onclick="document.getElementById('produk-section').scrollIntoView({behavior:'smooth'})">
+          <div class="category-circle">
+            🍘
+          </div>
+          <div class="category-name">Snack</div>
+          <div class="category-count" id="categoryItemCount">Memuat...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ETALASE PRODUK -->
+    <section id="produk-section">
+      <div class="section-title">
+        <span>Katalog Kerupuk & Snack</span>
+      </div>
+
+      <div id="loadingStatus" style="text-align:center; padding: 40px; color: var(--gray);">
+        Sedang memuat stok kerupuk dari toko...
+      </div>
+
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+  </div>
+
+  <!-- 5. TOMBOL WHATSAPP MELAYANG -->
+  <a href="#" id="floatingWALink" class="wa-float" target="_blank" title="Tanya Penjual via WhatsApp">
+    💬
+  </a>
+
+  <!-- 6. MODAL KERANJANG & CHECKOUT -->
+  <div class="modal-overlay" id="cartModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">🛒 Keranjang & Pengantaran</div>
+        <button class="close-btn" onclick="tutupKeranjangModal()">✕</button>
+      </div>
+
+      <div id="cartItemsContainer" style="margin-bottom: 20px;"></div>
+
+      <h3 style="margin-bottom: 12px; font-size: 19px;">📍 Alamat Pengiriman Pelanggan</h3>
+      <div class="form-group">
+        <label>Nama Lengkap:</label>
+        <input type="text" id="custName" placeholder="Contoh: Pak Budi Santoso">
+      </div>
+      <div class="form-group">
+        <label>Nomor WhatsApp Aktif:</label>
+        <input type="tel" id="custWA" placeholder="Contoh: 081234567890">
+      </div>
+      <div class="form-group">
+        <label>Alamat Rumah Lengkap:</label>
+        <textarea id="custAddress" rows="2" placeholder="Nama Jalan, Nomor Rumah, RT/RW, Kelurahan"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Patokan Rumah (Biar Kurir Tidak Tersasar):</label>
+        <input type="text" id="custPatokan" placeholder="Contoh: Cat pagar biru samping musholla">
+      </div>
+
+      <h3 style="margin: 16px 0 10px; font-size: 19px;">🛵 Pilihan Jasa Pengantaran</h3>
+      
+      <label class="ship-card active" onclick="pilihJasaKirim('Kurir Toko', 10000)">
+        <input type="radio" name="shippingOpt" checked>
+        <div>
+          <strong>Kurir Toko Langsung (+Rp 10.000)</strong><br>
+          <small style="color:var(--gray)">Diantar pegawai toko kami ke depan pintu</small>
+        </div>
+      </label>
+
+      <label class="ship-card" onclick="pilihJasaKirim('Gojek / Grab Instant', 0)">
+        <input type="radio" name="shippingOpt">
+        <div>
+          <strong>Gojek / Grab Instant</strong><br>
+          <small style="color:var(--gray)">Ongkir dibayar ke driver / dicek di aplikasi</small>
+        </div>
+      </label>
+
+      <label class="ship-card" onclick="pilihJasaKirim('JNT / JNE / Shopee Xpress', 0)">
+        <input type="radio" name="shippingOpt">
+        <div>
+          <strong>JNT / JNE / Shopee Xpress</strong><br>
+          <small style="color:var(--gray)">Khusus luar kota (Ongkir dicek via WA)</small>
+        </div>
+      </label>
+
+      <div class="cart-summary">
+        <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+          <span>Subtotal Kerupuk:</span>
+          <strong id="summarySubtotal">Rp 0</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+          <span>Ongkos Kirim:</span>
+          <strong id="summaryShipping">Rp 10.000</strong>
+        </div>
+        <hr style="border:0; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+        <div style="display:flex; justify-content:space-between; font-size: 21px;">
+          <span>Total Pembayaran:</span>
+          <strong style="color: var(--primary);" id="summaryGrandTotal">Rp 0</strong>
+        </div>
+      </div>
+
+      <button class="btn-checkout" onclick="prosesCheckoutWhatsApp()">
+        Pesan Sekarang via WhatsApp 📲
+      </button>
+    </div>
+  </div>
+
+  <!-- 7. MODAL PROFIL TOKO -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">🥨 Tentang Jualannya iti</div>
+        <button class="close-btn" onclick="tutupProfilModal()">✕</button>
+      </div>
+      <p style="margin-bottom: 14px;"><strong>Jualannya iti</strong> menyediakan aneka kerupuk dan cemilan khas yang renyah, gurih, dan higienis.</p>
+      <p style="margin-bottom: 14px;">🛵 <strong>Layanan Antar:</strong> Melayani antar langsung kurir toko, Gojek/Grab, hingga ekspedisi pengiriman paket.</p>
+      <p style="margin-bottom: 18px;">📞 <strong>WhatsApp Resmi:</strong> 0813-7741-3338</p>
+      <button class="btn-cart" onclick="tutupProfilModal()">Kembali Belanja</button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT & BACKEND INTEGRASI -->
+  <script>
+    // ========================================================
+    // KONFIGURASI RESMI TOKO JUALANNYA ITI (TERSIMPAN)
+    // ========================================================
+    const NOMOR_WA_TOKO = "6281377413338";
+    const SCRIPT_URL    = "https://script.google.com/macros/s/AKfycbz36ncvqz2x7Q-w4gzBE2NQ9c1PushvswLW1dGq50P3__sBRKOo0feNfSH4pyTlSHlHjg/exec";
+
+    // Link WhatsApp Mengambang Otomatis
+    document.getElementById('floatingWALink').href = `https://wa.me/${NOMOR_WA_TOKO}?text=${encodeURIComponent('Halo Jualannya iti, saya ingin tanya seputar produk kerupuknya 🙏')}`;
+
+    let daftarProduk = [];
+    let keranjang = {}; 
+    let ongkirTerpilih = 10000;
+    let kurirTerpilih = "Kurir Toko";
+
+    // Muat data pembeli yang tersimpan di HP agar tidak ketik ulang
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('iti_nama')) document.getElementById('custName').value = localStorage.getItem('iti_nama');
+      if (localStorage.getItem('iti_wa')) document.getElementById('custWA').value = localStorage.getItem('iti_wa');
+      if (localStorage.getItem('iti_alamat')) document.getElementById('custAddress').value = localStorage.getItem('iti_alamat');
+      if (localStorage.getItem('iti_patokan')) document.getElementById('custPatokan').value = localStorage.getItem('iti_patokan');
+      
+      ambilProduk();
+    });
+
+    // 1. Ambil Produk dari Google Sheets
+    async function ambilProduk() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getProduk`);
+        daftarProduk = await res.json();
+
+        document.getElementById('loadingStatus').style.display = 'none';
+        document.getElementById('categoryItemCount').innerText = `${daftarProduk.length} items`;
+        renderProdukGrid();
+      } catch (err) {
+        document.getElementById('loadingStatus').innerText = "Gagal memuat produk. Pastikan spreadsheet sudah terisi data.";
+      }
+    }
+
+// Muat data pengaturan banner dari CMS
+    async function ambilPengaturanBanner() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getSettings`);
+        const set = await res.json();
+        if (set.banner_img) document.querySelector('.hero-img').src = set.banner_img;
+        if (set.banner_title) document.querySelector('.hero-title').innerText = set.banner_title;
+        if (set.banner_subtitle) document.querySelector('.hero-subtitle').innerText = set.banner_subtitle;
+        if (set.banner_desc) document.querySelector('.hero-desc').innerText = set.banner_desc;
+      } catch (e) {
+        console.log("Menggunakan banner default");
+      }
+    }
+
+    // Panggil saat website pertama kali dibuka:
+    window.addEventListener('DOMContentLoaded', () => {
+      // ... kode localStorage sebelumnya ...
+      ambilPengaturanBanner();
+      ambilProduk();
+    });
+
+    // 2. Tampilkan Produk Sesuai Gambar Ketiga SaudagarWP
+    function renderProdukGrid() {
+      const container = document.getElementById('productGrid');
+      container.innerHTML = "";
+
+      daftarProduk.forEach(item => {
+        const stokAda = Number(item.stok) > 0;
+        const card = document.createElement('div');
+        card.className = "product-card";
+
+        card.innerHTML = `
+          <div>
+            <img src="${item.foto_url || 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=500'}" class="product-image" alt="${item.nama}">
+            <span class="stock-tag ${stokAda ? '' : 'empty'}">
+              ${stokAda ? `Tersedia: ${item.stok}` : 'Stok Habis'}
+            </span>
+            <div class="product-title">${item.nama}</div>
+            <div class="product-desc">${item.deskripsi || 'Renyah dan nikmat.'}</div>
+            <div class="product-price">Rp ${Number(item.harga).toLocaleString('id-ID')}</div>
+          </div>
+
+          <div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="ubahAngka('${item.id}', -1)" ${!stokAda ? 'disabled' : ''}>-</button>
+              <div class="qty-value" id="qty-val-${item.id}">1</div>
+              <button class="qty-btn" onclick="ubahAngka('${item.id}', 1)" ${!stokAda ? 'disabled' : ''}>+</button>
+            </div>
+            <button class="btn-cart" onclick="tambahKeKeranjang('${item.id}')" ${!stokAda ? 'disabled' : ''}>
+              ${stokAda ? 'Tambah ke keranjang' : 'Stok Habis'}
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 3. Tombol [- 1 +]
+    function ubahAngka(id, delta) {
+      const elem = document.getElementById(`qty-val-${id}`);
+      let currentVal = parseInt(elem.innerText);
+      let newVal = currentVal + delta;
+      if (newVal < 1) newVal = 1;
+      elem.innerText = newVal;
+    }
+
+    // 4. Tambah ke Keranjang Belanja
+    function tambahKeKeranjang(id) {
+      const item = daftarProduk.find(p => String(p.id) === String(id));
+      const qty = parseInt(document.getElementById(`qty-val-${id}`).innerText);
+
+      if (keranjang[id]) {
+        keranjang[id].qty += qty;
+      } else {
+        keranjang[id] = {
+          id: item.id,
+          nama: item.nama,
+          harga: Number(item.harga),
+          qty: qty
+        };
+      }
+
+      perbaruiBadgeKeranjang();
+      alert(`✅ Berhasil menambahkan ${qty} bungkus ${item.nama} ke keranjang!`);
+    }
+
+    function perbaruiBadgeKeranjang() {
+      let totalItem = 0;
+      for (let k in keranjang) totalItem += keranjang[k].qty;
+      document.getElementById('cartCountBadge').innerText = totalItem;
+    }
+
+    // 5. Kelola Modal Keranjang
+    function bukaKeranjangModal() {
+      const container = document.getElementById('cartItemsContainer');
+      container.innerHTML = "";
+
+      let subtotal = 0;
+      let hasItems = false;
+
+      for (let k in keranjang) {
+        hasItems = true;
+        const item = keranjang[k];
+        const lineTotal = item.harga * item.qty;
+        subtotal += lineTotal;
+
+        const row = document.createElement('div');
+        row.style.cssText = "display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;";
+        row.innerHTML = `
+          <div>
+            <strong>${item.nama}</strong><br>
+            <small style="color:var(--gray)">${item.qty} bungkus x Rp ${item.harga.toLocaleString('id-ID')}</small>
+          </div>
+          <div>
+            <strong>Rp ${lineTotal.toLocaleString('id-ID')}</strong>
+            <button onclick="hapusItemKeranjang('${k}')" style="background:none; border:none; color:red; cursor:pointer; margin-left:8px; font-size:18px;">🗑️</button>
+          </div>
+        `;
+        container.appendChild(row);
+      }
+
+      if (!hasItems) {
+        container.innerHTML = "<p style='color:var(--gray); text-align:center; padding:15px;'>Keranjang Anda masih kosong.</p>";
+      }
+
+      document.getElementById('summarySubtotal').innerText = "Rp " + subtotal.toLocaleString('id-ID');
+      document.getElementById('summaryShipping').innerText = ongkirTerpilih > 0 ? "Rp " + ongkirTerpilih.toLocaleString('id-ID') : "Sesuai Aplikasi";
+      
+      const grandTotal = ongkirTerpilih > 0 ? (subtotal + ongkirTerpilih) : subtotal;
+      document.getElementById('summaryGrandTotal').innerText = ongkirTerpilih > 0 
+        ? "Rp " + grandTotal.toLocaleString('id-ID') 
+        : "Rp " + grandTotal.toLocaleString('id-ID') + " + Ongkir";
+
+      document.getElementById('cartModal').style.display = 'flex';
+    }
+
+    function tutupKeranjangModal() { document.getElementById('cartModal').style.display = 'none'; }
+    function bukaProfilModal() { document.getElementById('profileModal').style.display = 'flex'; }
+    function tutupProfilModal() { document.getElementById('profileModal').style.display = 'none'; }
+
+    function hapusItemKeranjang(id) {
+      delete keranjang[id];
+      perbaruiBadgeKeranjang();
+      bukaKeranjangModal();
+    }
+
+    function pilihJasaKirim(nama, biaya) {
+      kurirTerpilih = nama;
+      ongkirTerpilih = biaya;
+
+      document.querySelectorAll('.ship-card').forEach(c => c.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      event.currentTarget.querySelector('input').checked = true;
+
+      bukaKeranjangModal();
+    }
+
+    // 6. Checkout ke WhatsApp & Catat ke Database Sheets
+    async function prosesCheckoutWhatsApp() {
+      const nama = document.getElementById('custName').value.trim();
+      const wa = document.getElementById('custWA').value.trim();
+      const alamat = document.getElementById('custAddress').value.trim();
+      const patokan = document.getElementById('custPatokan').value.trim();
+
+      if (!nama || !wa || !alamat || !patokan) {
+        alert("Mohon lengkapi Nama, No. WhatsApp, Alamat Rumah Lengkap, dan Patokan agar pesanan tidak tersasar.");
+        return;
+      }
+
+      if (Object.keys(keranjang).length === 0) {
+        alert("Keranjang Anda masih kosong! Silakan pilih kerupuk terlebih dahulu.");
+        return;
+      }
+
+      // Simpan data di memori HP pelanggan
+      localStorage.setItem('iti_nama', nama);
+      localStorage.setItem('iti_wa', wa);
+      localStorage.setItem('iti_alamat', alamat);
+      localStorage.setItem('iti_patokan', patokan);
+
+      const orderId = "ITI-" + Math.floor(1000 + Math.random() * 9000);
+      let rincianBarang = "";
+      let subtotal = 0;
+
+      for (let k in keranjang) {
+        const item = keranjang[k];
+        rincianBarang += `• ${item.qty}x ${item.nama} (@Rp ${item.harga.toLocaleString('id-ID')})\n`;
+        subtotal += item.harga * item.qty;
+      }
+
+      const totalAkhir = ongkirTerpilih > 0 
+        ? `Rp ${(subtotal + ongkirTerpilih).toLocaleString('id-ID')}`
+        : `Rp ${subtotal.toLocaleString('id-ID')} (+ Ongkir Ojol/Ekspedisi)`;
+
+      // Format Struk WhatsApp Bersih & Mudah Dibaca
+      const pesanStruk = `🧾 *STRUK PESANAN - JUALANNYA ITI*
+----------------------------------------
+No. Pesanan : #${orderId}
+Tanggal     : ${new Date().toLocaleDateString('id-ID')}
+
+👤 *DATA PEMBELI:*
+Nama   : ${nama}
+No. WA : ${wa}
+Alamat : ${alamat}
+*Patokan* : ${patokan}
+
+🛵 *PENGIRIMAN:*
+Jasa   : *${kurirTerpilih}*
+Ongkir : ${ongkirTerpilih > 0 ? 'Rp 10.000' : 'Sesuai Tarif Aplikasi / Ekspedisi'}
+
+🛒 *RINCIAN BELANJA:*
+${rincianBarang}----------------------------------------
+💰 *TOTAL BAYAR : ${totalAkhir}*
+----------------------------------------
+
+Halo Jualannya iti, saya sudah memesan kerupuk lewat website. Mohon segera diproses ya. Terima kasih! 🙏`;
+
+      // Simpan ke Google Spreadsheet di latar belakang
+      try {
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            order_id: orderId,
+            nama: nama,
+            no_wa: wa,
+            alamat: alamat,
+            patokan: patokan,
+            detail_pesanan: rincianBarang.replace(/\n/g, ", "),
+            kurir: kurirTerpilih,
+            ongkir: ongkirTerpilih,
+            total: totalAkhir
+          })
+        });
+      } catch (e) {
+        console.log("Sheet log error:", e);
+      }
+
+      // Buka Aplikasi WhatsApp Toko
+      window.location.href = `https://wa.me/${NOMOR_WA_TOKO}?text=${encodeURIComponent(pesanStruk)}`;
+    }
+  </script>
+</body>
+</html>
