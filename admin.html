@@ -21,7 +21,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--dark); font-size: 15px; }
 
-    /* LAYOUT UTAMA */
     .app-wrapper { display: flex; min-height: 100vh; }
     .sidebar { width: 260px; background: #0f172a; color: white; padding: 24px 16px; flex-shrink: 0; }
     .sidebar h2 { font-size: 22px; font-weight: 800; color: #38bdf8; margin-bottom: 24px; padding-left: 8px; }
@@ -33,26 +32,22 @@
     .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
     .page-title { font-size: 26px; font-weight: 800; }
 
-    /* KARTU STATISTIK */
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .stat-card { background: var(--white); padding: 20px; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
     .stat-label { font-size: 14px; color: var(--gray); font-weight: 600; }
     .stat-num { font-size: 28px; font-weight: 800; margin-top: 6px; color: var(--primary); }
 
-    /* TABEL DATA */
     .card { background: var(--white); border-radius: 16px; padding: 24px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
     table { width: 100%; border-collapse: collapse; margin-top: 14px; }
     th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 15px; }
     th { font-weight: 700; color: var(--gray); background: #f8fafc; }
     .thumb-img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #e2e8f0; }
 
-    /* FORM & INPUT */
     .form-group { margin-bottom: 16px; }
     label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 15px; }
     input, textarea, select { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 15px; font-family: inherit; }
     input:focus, textarea:focus, select:focus { border-color: var(--primary); outline: none; }
 
-    /* BUTTONS */
     .btn { padding: 10px 16px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
     .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-dark); }
@@ -61,11 +56,9 @@
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--dark); }
     .btn-sm { padding: 6px 12px; font-size: 13px; }
 
-    /* MODAL LOGIN PIN */
     #authOverlay { position: fixed; inset: 0; background: #0f172a; display: flex; align-items: center; justify-content: center; z-index: 9999; }
     .auth-box { background: white; padding: 32px; border-radius: 16px; width: 340px; text-align: center; }
 
-    /* PREVIEW BANNER */
     .banner-preview-box { border-radius: 14px; overflow: hidden; margin-top: 14px; border: 2px dashed #cbd5e1; padding: 14px; background: #f8fafc; }
     .banner-preview-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 8px; }
 
@@ -78,22 +71,23 @@
 </head>
 <body>
 
-  <!-- MODAL LOGIN PIN ADMIN -->
+  <!-- LOGIN PIN ADMIN -->
   <div id="authOverlay">
     <div class="auth-box">
       <h2 style="margin-bottom: 8px;">🥨 CMS Admin</h2>
       <p style="color:var(--gray); font-size:14px; margin-bottom: 20px;">Masukkan PIN Admin untuk mengelola toko</p>
-      <input type="password" id="inputPin" placeholder="Masukkan PIN (Default: 1234)" style="text-align:center; font-size:20px; letter-spacing:4px; margin-bottom:14px;">
+      <input type="password" id="inputPin" placeholder="PIN (Default: 1234)" style="text-align:center; font-size:20px; letter-spacing:4px; margin-bottom:14px;">
       <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="cekLogin()">Masuk Dashboard</button>
     </div>
   </div>
 
   <div class="app-wrapper">
-    <!-- SIDEBAR MENU -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <h2>Jualannya iti</h2>
       <div class="menu-item active" onclick="bukaTab('tab-pesanan')">🛒 Rekapan Pesanan</div>
       <div class="menu-item" onclick="bukaTab('tab-produk')">📦 Kelola Produk & Stok</div>
+      <div class="menu-item" onclick="bukaTab('tab-barang-masuk')">📥 Barang Masuk (Restock)</div>
       <div class="menu-item" onclick="bukaTab('tab-banner')">🖼️ Foto Banner & Tampilan</div>
       <div class="menu-item" onclick="bukaTab('tab-pelanggan')">👥 Data Pelanggan</div>
       <div style="margin-top: 30px; border-top: 1px solid #334155; padding-top: 16px;">
@@ -111,7 +105,7 @@
           <div class="stat-num" id="statPesanan">0</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Total Produk Toko</div>
+          <div class="stat-label">Total Jenis Produk</div>
           <div class="stat-num" id="statProduk">0</div>
         </div>
         <div class="stat-card">
@@ -121,7 +115,7 @@
       </div>
 
       <!-- ======================================================= -->
-      <!-- TAB 1: REKAPAN PESANAN & UBAH STATUS (DILENGKAPI TOMBOL SIMPAN) -->
+      <!-- TAB 1: REKAPAN PESANAN & UBAH STATUS -->
       <!-- ======================================================= -->
       <section id="tab-pesanan" class="tab-pane">
         <div class="header-bar">
@@ -181,7 +175,59 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 3: PENGATURAN BANNER PROMO UTAMA -->
+      <!-- TAB 3: FITUR BARU BARANG MASUK (RESTOCK) -->
+      <!-- ======================================================= -->
+      <section id="tab-barang-masuk" class="tab-pane" style="display:none;">
+        <h1 class="page-title" style="margin-bottom: 20px;">Input Barang Masuk (Tambah Stok)</h1>
+
+        <!-- Form Tambah Stok Barang Masuk -->
+        <div class="card">
+          <h3 style="margin-bottom: 14px;">Form Input Kerupuk Masuk</h3>
+          
+          <div class="form-group">
+            <label>Pilih Kerupuk / Snack:</label>
+            <select id="bmProdukSelect">
+              <option value="">Pilih Produk...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Jumlah Masuk (Bungkus):</label>
+            <input type="number" id="bmJumlah" placeholder="Contoh: 50" min="1">
+          </div>
+
+          <div class="form-group">
+            <label>Keterangan / Catatan:</label>
+            <input type="text" id="bmKeterangan" placeholder="Contoh: Baru selesai digoreng pagi ini">
+          </div>
+
+          <button class="btn btn-success" onclick="simpanBarangMasuk()">📥 Simpan & Tambah ke Stok Toko</button>
+        </div>
+
+        <!-- Tabel Riwayat Barang Masuk -->
+        <div class="card">
+          <h3 style="margin-bottom: 14px;">Riwayat Barang Masuk</h3>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID Masuk</th>
+                  <th>Tanggal</th>
+                  <th>Nama Produk</th>
+                  <th>Jumlah Masuk</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody id="tabelBarangMasukBody">
+                <tr><td colspan="5" style="text-align:center; padding:20px;">Memuat riwayat...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 4: PENGATURAN BANNER PROMO -->
       <!-- ======================================================= -->
       <section id="tab-banner" class="tab-pane" style="display:none;">
         <h1 class="page-title" style="margin-bottom: 20px;">Pengaturan Foto Banner & Halaman Depan</h1>
@@ -219,7 +265,7 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 4: DATA PELANGGAN -->
+      <!-- TAB 5: DATA PELANGGAN -->
       <!-- ======================================================= -->
       <section id="tab-pelanggan" class="tab-pane" style="display:none;">
         <div class="header-bar">
@@ -284,15 +330,11 @@
   </div>
 
   <script>
-    // =======================================================
-    // KONFIGURASI TERSIMPAN RESMI
-    // =======================================================
     const SCRIPT_URL    = "https://script.google.com/macros/s/AKfycbz36ncvqz2x7Q-w4gzBE2NQ9c1PushvswLW1dGq50P3__sBRKOo0feNfSH4pyTlSHlHjg/exec";
     const NOMOR_WA_TOKO = "6281377413338";
     let PIN_ADMIN_SERVER = "1234"; 
     let listProduk = [];
 
-    // 1. LOGIN PIN ADMIN
     function cekLogin() {
       const pin = document.getElementById('inputPin').value;
       if (pin === PIN_ADMIN_SERVER) {
@@ -306,11 +348,11 @@
     function inisialisasiCMS() {
       muatPesanan();
       muatProduk();
+      muatBarangMasuk();
       muatPengaturan();
       muatPelanggan();
     }
 
-    // 2. NAVIGASI TAB CMS
     function bukaTab(tabId) {
       document.querySelectorAll('.tab-pane').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
@@ -318,7 +360,7 @@
       event.currentTarget.classList.add('active');
     }
 
-    // 3. TAB PESANAN (STATUS: Order, Procces, Delivered, Done + TOMBOL SIMPAN)
+    // 1. REKAPAN PESANAN & POTONG STOK OTOMATIS
     async function muatPesanan() {
       try {
         const res = await fetch(`${SCRIPT_URL}?action=getOrders`);
@@ -334,7 +376,6 @@
 
         orders.forEach(o => {
           const tr = document.createElement('tr');
-          
           tr.innerHTML = `
             <td><strong>#${o.order_id}</strong></td>
             <td><small>${o.tanggal}</small></td>
@@ -348,7 +389,6 @@
             </td>
             <td><strong>${o.total}</strong></td>
             <td>
-              <!-- DROPDOWN 4 STATUS SESUAI PERMINTAAN ANDA -->
               <div style="display:flex; gap:6px; align-items:center;">
                 <select id="status-select-${o.order_id}" style="padding:6px 8px; font-size:13px; font-weight:700; border-radius:6px; border:2px solid var(--border); width:auto;">
                   <option value="Order" ${o.status==='Order' ? 'selected' : ''}>🟡 Order (Masuk)</option>
@@ -356,7 +396,6 @@
                   <option value="Delivered" ${o.status==='Delivered' ? 'selected' : ''}>🚚 Delivered (Diantar)</option>
                   <option value="Done" ${o.status==='Done' ? 'selected' : ''}>✅ Done (Pickup Toko)</option>
                 </select>
-                <!-- TOMBOL SIMPAN STATUS KE SPREADSHEET -->
                 <button class="btn btn-sm btn-primary" onclick="simpanStatusPesanan('${o.order_id}')">
                   💾 Simpan
                 </button>
@@ -375,28 +414,34 @@
       }
     }
 
-    // FUNGSI MENYIMPAN STATUS BARU KE GOOGLE SPREADSHEET
     async function simpanStatusPesanan(orderId) {
       const selectElem = document.getElementById(`status-select-${orderId}`);
       const statusBaru = selectElem.value;
 
-      // Kirim pembaruan ke Google Spreadsheet
       await kirimKeBackend({ 
         action: "updateOrderStatus", 
         order_id: orderId, 
         new_status: statusBaru 
       });
 
-      alert(`✅ Berhasil! Status pesanan #${orderId} telah disimpan menjadi "${statusBaru}" di spreadsheet.`);
+      if (statusBaru === "Delivered" || statusBaru === "Done") {
+        alert(`✅ Status pesanan #${orderId} disimpan sebagai "${statusBaru}". Sisa stok produk otomatis terpotong!`);
+      } else {
+        alert(`✅ Status pesanan #${orderId} telah diperbarui menjadi "${statusBaru}".`);
+      }
+
+      // Segarkan stok di tampilan produk
+      muatProduk();
     }
 
-    // 4. KELOLA PRODUK & STOK
+    // 2. KELOLA PRODUK
     async function muatProduk() {
       try {
         const res = await fetch(`${SCRIPT_URL}?action=getProduk`);
         listProduk = await res.json();
         document.getElementById('statProduk').innerText = listProduk.length;
         renderTabelProduk();
+        updateDropdownBarangMasuk();
       } catch(e) {
         console.log("Error get produk:", e);
       }
@@ -413,7 +458,7 @@
           <td><strong>${p.nama}</strong><br><small style="color:var(--gray)">${p.id}</small></td>
           <td>Rp ${Number(p.harga).toLocaleString('id-ID')}</td>
           <td>
-            <strong style="color:${p.stok > 0 ? 'var(--green)' : 'var(--red)'}">${p.stok}</strong> bungkus
+            <strong style="color:${p.stok > 0 ? 'var(--green)' : 'var(--red)'}; font-size:16px;">${p.stok}</strong> bungkus
           </td>
           <td>
             <button class="btn btn-outline btn-sm" onclick="editProdukModal('${p.id}')">✏️ Edit</button>
@@ -454,15 +499,13 @@
       document.getElementById('modalProduk').style.display = 'flex';
     }
 
-    function tutupModalProduk() {
-      document.getElementById('modalProduk').style.display = 'none';
-    }
+    function tutupModalProduk() { document.getElementById('modalProduk').style.display = 'none'; }
 
     async function simpanDataProduk() {
       const id = document.getElementById('prodId').value;
       const isNew = !id;
 
-      const payload = {
+      await kirimKeBackend({
         action: isNew ? "addProduct" : "updateProduct",
         id: id,
         nama: document.getElementById('prodNama').value.trim(),
@@ -470,49 +513,103 @@
         stok: document.getElementById('prodStok').value,
         foto_url: document.getElementById('prodFoto').value.trim(),
         deskripsi: document.getElementById('prodDeskripsi').value.trim()
-      };
+      });
 
-      await kirimKeBackend(payload);
       tutupModalProduk();
       alert("✅ Data produk berhasil disimpan!");
       muatProduk();
     }
 
-    // 5. PENGATURAN BANNER
+    // 3. FITUR BARANG MASUK (RESTOCK)
+    function updateDropdownBarangMasuk() {
+      const sel = document.getElementById('bmProdukSelect');
+      sel.innerHTML = '<option value="">-- Pilih Produk Kerupuk --</option>';
+      listProduk.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.innerText = `${p.nama} (Sisa Stok: ${p.stok})`;
+        sel.appendChild(opt);
+      });
+    }
+
+    async function simpanBarangMasuk() {
+      const idProd = document.getElementById('bmProdukSelect').value;
+      const jumlah = document.getElementById('bmJumlah').value;
+      const ket = document.getElementById('bmKeterangan').value.trim();
+
+      if (!idProd) { alert("Pilih produk terlebih dahulu!"); return; }
+      if (!jumlah || jumlah <= 0) { alert("Masukkan jumlah kerupuk masuk dengan benar!"); return; }
+
+      await kirimKeBackend({
+        action: "addBarangMasuk",
+        id_produk: idProd,
+        jumlah: jumlah,
+        keterangan: ket
+      });
+
+      alert(`✅ Berhasil menambahkan ${jumlah} bungkus kerupuk ke stok toko!`);
+      document.getElementById('bmJumlah').value = "";
+      document.getElementById('bmKeterangan').value = "";
+      muatProduk();
+      muatBarangMasuk();
+    }
+
+    async function muatBarangMasuk() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getBarangMasuk`);
+        const list = await res.json();
+        const tbody = document.getElementById('tabelBarangMasukBody');
+        tbody.innerHTML = "";
+
+        if (list.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding:20px;'>Belum ada data barang masuk.</td></tr>";
+          return;
+        }
+
+        list.forEach(bm => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>#${bm.id_masuk}</strong></td>
+            <td><small>${bm.tanggal}</small></td>
+            <td><strong>${bm.nama_produk}</strong></td>
+            <td><strong style="color:var(--green); font-size:16px;">+${bm.jumlah}</strong> bungkus</td>
+            <td>${bm.keterangan || '-'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.log("Error get barang masuk:", e);
+      }
+    }
+
+    // 4. PENGATURAN BANNER
     async function muatPengaturan() {
       try {
         const res = await fetch(`${SCRIPT_URL}?action=getSettings`);
         const set = await res.json();
         if (set.admin_pin) PIN_ADMIN_SERVER = String(set.admin_pin);
-        
         document.getElementById('settingBannerImg').value = set.banner_img || "";
         document.getElementById('bannerImgPreview').src = set.banner_img || "";
         document.getElementById('settingBannerSubtitle').value = set.banner_subtitle || "";
         document.getElementById('settingBannerTitle').value = set.banner_title || "";
         document.getElementById('settingBannerDesc').value = set.banner_desc || "";
-      } catch (e) {
-        console.log("Error get settings:", e);
-      }
+      } catch (e) {}
     }
 
-    function updatePreviewBanner(val) {
-      document.getElementById('bannerImgPreview').src = val;
-    }
+    function updatePreviewBanner(val) { document.getElementById('bannerImgPreview').src = val; }
 
     async function simpanPengaturanBanner() {
-      const payload = {
+      await kirimKeBackend({
         action: "saveSettings",
         banner_img: document.getElementById('settingBannerImg').value.trim(),
         banner_subtitle: document.getElementById('settingBannerSubtitle').value.trim(),
         banner_title: document.getElementById('settingBannerTitle').value.trim(),
         banner_desc: document.getElementById('settingBannerDesc').value.trim()
-      };
-
-      await kirimKeBackend(payload);
+      });
       alert("✅ Pengaturan foto banner & teks berhasil diperbarui!");
     }
 
-    // 6. DATA PELANGGAN
+    // 5. PELANGGAN
     async function muatPelanggan() {
       try {
         const res = await fetch(`${SCRIPT_URL}?action=getUsers`);
@@ -532,12 +629,9 @@
           `;
           tbody.appendChild(tr);
         });
-      } catch(e) {
-        console.log("Error get users:", e);
-      }
+      } catch(e) {}
     }
 
-    // HELPER: KIRIM DATA KE GOOGLE SPREADSHEET
     async function kirimKeBackend(payload) {
       try {
         await fetch(SCRIPT_URL, {
